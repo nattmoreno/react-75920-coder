@@ -1,12 +1,12 @@
 import { Link } from "react-router";
 
-const Item = ({ id, title, price, pictureUrl }) => {
+const Item = (props) => {
     return (
         <article className="item">
-            <img src={pictureUrl} alt={`Portada del libro ${title}`} />
-            <h3>{title}</h3>
-            <p>${price}</p>
-            <Link to={`/item/${id}`}>Ver detalle</Link>
+            {/* <img src={props.product.pictureUrl} alt={`Portada del libro ${props.product.title}`} /> */}
+            <h3>{props.product.title}</h3>
+            <p>${props.product.price}</p>
+            <Link to={`/item/${props.product.id}`}>Ver detalle</Link>
         </article>
     );
 };

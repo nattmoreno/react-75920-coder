@@ -1,24 +1,37 @@
 import { useEffect, useState } from "react";
+import { getProducts, getCategoryTitle } from "../utils/getProducts";
 import ItemList from "./ItemList";
-import { getProducts } from "../utils/getProducts";
+import { useParams } from "react-router";
 
-const ItemListContainer = (props) => {
-    // const [loading, setLoading] = useState(true);
+function ItemListContainer() {
     const [products, setProducts] = useState([]);
+    const { categoryId } = useParams();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getProducts().then((response) => {
-            setProducts(response).catch((error) => {
-                console.error("Error fetching products:", error);
+        setLoading(true);
+        getProducts(categoryId)
+            .then((products) => {
+                setProducts(products);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error cargando productos:", error);
+                setLoading(false);
             });
-        });
-    }, []);
+    }, [categoryId]);
 
+    if (loading) return <span className="loader"></span>;
     return (
-        <div className="container">
-            <ItemList products={products} />
+        <div>
+            <h2 className="category-title">{getCategoryTitle()}</h2>
+            {products.length > 0 ? (
+                <ItemList products={products} />
+            ) : (
+                <p className="no-products">No hay productos disponibles en esta categoría.</p>
+            )}
         </div>
     );
-};
+}
 
 export default ItemListContainer;
